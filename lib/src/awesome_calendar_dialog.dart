@@ -72,70 +72,72 @@ class _AwesomeCalendarDialogState extends State<AwesomeCalendarDialog> {
       content: SizedBox(
         width: 300,
         height: widget.canToggleRangeSelection ? 375 : 320,
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5, top: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: const Icon(Icons.keyboard_arrow_left),
-                    onPressed: () {
-                      calendarStateKey.currentState!.setCurrentDate(DateTime(
-                          currentMonth!.year, currentMonth!.month - 1));
-                    },
-                  ),
-                  Text(DateFormat('yMMMM').format(currentMonth!)),
-                  IconButton(
-                    icon: const Icon(Icons.keyboard_arrow_right),
-                    onPressed: () {
-                      calendarStateKey.currentState!.setCurrentDate(DateTime(
-                          currentMonth!.year, currentMonth!.month + 1));
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AwesomeCalendar(
-                key: calendarStateKey,
-                startDate: DateTime(2018),
-                endDate: DateTime(2100),
-                selectedSingleDate: currentMonth,
-                selectedDates: selectedDates,
-                selectionMode: selectionMode,
-                onPageSelected: (DateTime? start, DateTime? end) {
-                  setState(() {
-                    currentMonth = start;
-                  });
-                },
-                dayTileBuilder: widget.dayTileBuilder,
-                weekdayLabels: widget.weekdayLabels,
-              ),
-            ),
-            if (widget.canToggleRangeSelection &&
-                selectionMode != SelectionMode.single)
-              ListTile(
-                title: Text(
-                  widget.rangeToggleText,
-                  style: const TextStyle(fontSize: 13),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5, top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_arrow_left),
+                      onPressed: () {
+                        calendarStateKey.currentState!.setCurrentDate(DateTime(
+                            currentMonth!.year, currentMonth!.month - 1));
+                      },
+                    ),
+                    Text(DateFormat('yMMMM').format(currentMonth!)),
+                    IconButton(
+                      icon: const Icon(Icons.keyboard_arrow_right),
+                      onPressed: () {
+                        calendarStateKey.currentState!.setCurrentDate(DateTime(
+                            currentMonth!.year, currentMonth!.month + 1));
+                      },
+                    ),
+                  ],
                 ),
-                leading: Switch(
-                  value: selectionMode == SelectionMode.range,
-                  onChanged: (bool value) {
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: AwesomeCalendar(
+                  key: calendarStateKey,
+                  startDate: DateTime(2018),
+                  endDate: DateTime(2100),
+                  selectedSingleDate: currentMonth,
+                  selectedDates: selectedDates,
+                  selectionMode: selectionMode,
+                  onPageSelected: (DateTime? start, DateTime? end) {
                     setState(() {
-                      selectionMode =
-                          value ? SelectionMode.range : SelectionMode.multi;
-                      selectedDates = <DateTime>[];
-                      calendarStateKey.currentState!.selectedDates =
-                          selectedDates;
+                      currentMonth = start;
                     });
                   },
+                  dayTileBuilder: widget.dayTileBuilder,
+                  weekdayLabels: widget.weekdayLabels,
                 ),
               ),
-          ],
+              if (widget.canToggleRangeSelection &&
+                  selectionMode != SelectionMode.single)
+                ListTile(
+                  title: Text(
+                    widget.rangeToggleText,
+                    style: const TextStyle(fontSize: 13),
+                  ),
+                  leading: Switch(
+                    value: selectionMode == SelectionMode.range,
+                    onChanged: (bool value) {
+                      setState(() {
+                        selectionMode =
+                            value ? SelectionMode.range : SelectionMode.multi;
+                        selectedDates = <DateTime>[];
+                        calendarStateKey.currentState!.selectedDates =
+                            selectedDates;
+                      });
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
